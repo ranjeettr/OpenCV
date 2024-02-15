@@ -1,0 +1,19 @@
+{
+  "name": "cad-vcpkg-versioning",
+  "version": "0.0.1",
+  "dependencies": [
+    {
+      "name": "opencv4",
+      "features": [
+        "png",
+        "jpeg"
+      ],
+      "default-features": false
+    },
+    {
+      "name": "opencv",
+      "default-features": false
+    }
+  ],
+  "builtin-baseline": "0c20b2a97c390e106150837042d921b0939e7ecb"
+}
