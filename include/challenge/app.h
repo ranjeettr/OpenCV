@@ -19,7 +19,7 @@ private:
     bool m_ready;
 
     std::vector<cv::Mat> m_resizedFrame;
-    std::mutex m_resizedMtx;
+    std::mutex m_mutex;
     std::condition_variable m_resizedCv;
 
     double m_scale;

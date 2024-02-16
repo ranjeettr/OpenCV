@@ -27,9 +27,10 @@ void App::DetectionThread()
 	{
 		cv::Mat resized;
 		{
-			std::unique_lock<std::mutex> lck(m_resizedMtx);
+			std::unique_lock<std::mutex> lck(m_mutex);
 			if( m_resizedFrame.empty() )
 			{
+				//Wait until we get a resized frame
 				m_resizedCv.wait(lck);
 			}
 	
@@ -45,8 +46,8 @@ void App::DetectionThread()
 			it->width = (double)it->width/m_scale;
 			it->height = (double)it->height/m_scale;
 		}
-	        // scale bounding boxes to input frame
-		std::unique_lock<std::mutex> lck(m_resizedMtx);
+	        // scaled bounding boxes to input frame
+		std::unique_lock<std::mutex> lck(m_mutex);
 		m_scaled.clear();
 		m_scaled = boxes;
 	}
@@ -60,16 +61,16 @@ bool App::callback(cv::Mat &frame)
 	m_scale = (double)input_width/(double)frame.cols;
 	cv::resize(frame, resized, cv::Size(input_width, m_scale*(double)frame.rows));
 	{
-		std::unique_lock<std::mutex> lck(m_resizedMtx);
+		std::unique_lock<std::mutex> lck(m_mutex);
 		m_resizedFrame.clear();
 		m_resizedFrame.push_back(resized);
-		m_resizedCv.notify_all();
+		m_resizedCv.notify_all(); //notify DetectionThread that a frame is available to process
 	}
 
 
 	{
         	// draw most recent boxes onto current frame
-		std::unique_lock<std::mutex> lck(m_resizedMtx);
+		std::unique_lock<std::mutex> lck(m_mutex);
         	Overlay(frame, m_scaled);
 	}
 
