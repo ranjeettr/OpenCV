@@ -8,7 +8,7 @@ using namespace std;
 using namespace std::placeholders;
 using namespace std::chrono;
 
-App::App() : m_ready(true)
+App::App() : m_ready(true), m_scale(0.0)
 {}
 
 bool App::init() {
