@@ -1,8 +1,9 @@
 #pragma once
 
 #include "opencv2/opencv.hpp"
+#include <functional>
 
-typedef bool (*StreamCallback)(cv::Mat&);
+typedef std::function<bool(cv::Mat&)> StreamCallback;
 
 /**
  * Stream the supplied video at the correct FPS.
